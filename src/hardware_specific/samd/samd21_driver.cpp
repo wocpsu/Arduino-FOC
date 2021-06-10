@@ -1,7 +1,7 @@
 
 
 
-#include "./samd_mcu.h"
+#include "./samd_driver.h"
 
 
 #ifdef _SAMD21_

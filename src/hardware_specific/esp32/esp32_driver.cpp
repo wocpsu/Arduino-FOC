@@ -1,79 +1,12 @@
-#include "../hardware_api.h"
+#include "./esp32_driver.h"
 
 #if defined(ESP_H)
-
-#include "driver/mcpwm.h"
-#include "soc/mcpwm_reg.h"
-#include "soc/mcpwm_struct.h"
-
-// empty motor slot
-#define _EMPTY_SLOT -20
-#define _TAKEN_SLOT -21
-
-// ABI bus frequency - would be better to take it from somewhere
-// but I did nto find a good exposed variable
-#define _MCPWM_FREQ 160e6f
-
-// preferred pwm resolution default
-#define _PWM_RES_DEF 2048
-// min resolution
-#define _PWM_RES_MIN 1500
-// max resolution
-#define _PWM_RES_MAX 3000
-// pwm frequency
-#define _PWM_FREQUENCY 25000 // default
-#define _PWM_FREQUENCY_MAX 50000 // mqx
-
-// structure containing motor slot configuration
-// this library supports up to 4 motors
-typedef struct {
-  int pinA;
-  mcpwm_dev_t* mcpwm_num;
-  mcpwm_unit_t mcpwm_unit;
-  mcpwm_operator_t mcpwm_operator;
-  mcpwm_io_signals_t mcpwm_a;
-  mcpwm_io_signals_t mcpwm_b;
-  mcpwm_io_signals_t mcpwm_c;
-} bldc_3pwm_motor_slots_t;
-typedef struct {
-  int pin1A;
-  mcpwm_dev_t* mcpwm_num;
-  mcpwm_unit_t mcpwm_unit;
-  mcpwm_operator_t mcpwm_operator1;
-  mcpwm_operator_t mcpwm_operator2;
-  mcpwm_io_signals_t mcpwm_1a;
-  mcpwm_io_signals_t mcpwm_1b;
-  mcpwm_io_signals_t mcpwm_2a;
-  mcpwm_io_signals_t mcpwm_2b;
-} stepper_4pwm_motor_slots_t;
-typedef struct {
-  int pin1pwm;
-  mcpwm_dev_t* mcpwm_num;
-  mcpwm_unit_t mcpwm_unit;
-  mcpwm_operator_t mcpwm_operator;
-  mcpwm_io_signals_t mcpwm_a;
-  mcpwm_io_signals_t mcpwm_b;
-} stepper_2pwm_motor_slots_t;
-
-typedef struct {
-  int pinAH;
-  mcpwm_dev_t* mcpwm_num;
-  mcpwm_unit_t mcpwm_unit;
-  mcpwm_operator_t mcpwm_operator1;
-  mcpwm_operator_t mcpwm_operator2;
-  mcpwm_io_signals_t mcpwm_ah;
-  mcpwm_io_signals_t mcpwm_bh;
-  mcpwm_io_signals_t mcpwm_ch;
-  mcpwm_io_signals_t mcpwm_al;
-  mcpwm_io_signals_t mcpwm_bl;
-  mcpwm_io_signals_t mcpwm_cl;
-} bldc_6pwm_motor_slots_t;
 
 // define bldc motor slots array
 bldc_3pwm_motor_slots_t esp32_bldc_3pwm_motor_slots[4] =  {
   {_EMPTY_SLOT, &MCPWM0, MCPWM_UNIT_0, MCPWM_OPR_A, MCPWM0A, MCPWM1A, MCPWM2A}, // 1st motor will be MCPWM0 channel A
-  {_EMPTY_SLOT, &MCPWM0, MCPWM_UNIT_0, MCPWM_OPR_B, MCPWM0B, MCPWM1B, MCPWM2B}, // 2nd motor will be MCPWM0 channel B
-  {_EMPTY_SLOT, &MCPWM1, MCPWM_UNIT_1, MCPWM_OPR_A, MCPWM0A, MCPWM1A, MCPWM2A}, // 3rd motor will be MCPWM1 channel A
+  {_EMPTY_SLOT, &MCPWM1, MCPWM_UNIT_1, MCPWM_OPR_A, MCPWM0A, MCPWM1A, MCPWM2A}, // 1rd motor will be MCPWM1 channel A
+  {_EMPTY_SLOT, &MCPWM0, MCPWM_UNIT_0, MCPWM_OPR_B, MCPWM0B, MCPWM1B, MCPWM2B}, // 3nd motor will be MCPWM0 channel B
   {_EMPTY_SLOT, &MCPWM1, MCPWM_UNIT_1, MCPWM_OPR_B, MCPWM0B, MCPWM1B, MCPWM2B}  // 4th motor will be MCPWM1 channel B
   };
 
@@ -92,8 +25,8 @@ stepper_4pwm_motor_slots_t esp32_stepper_4pwm_motor_slots[2] =  {
 // define 2pwm stepper motor slots array
 stepper_2pwm_motor_slots_t esp32_stepper_2pwm_motor_slots[4] =  {
   {_EMPTY_SLOT, &MCPWM0, MCPWM_UNIT_0, MCPWM_OPR_A, MCPWM0A, MCPWM1A}, // 1st motor will be MCPWM0 channel A
-  {_EMPTY_SLOT, &MCPWM0, MCPWM_UNIT_0, MCPWM_OPR_B, MCPWM0B, MCPWM1B}, // 2nd motor will be MCPWM0 channel B
-  {_EMPTY_SLOT, &MCPWM1, MCPWM_UNIT_1, MCPWM_OPR_A, MCPWM0A, MCPWM1A}, // 3rd motor will be MCPWM1 channel A
+  {_EMPTY_SLOT, &MCPWM1, MCPWM_UNIT_1, MCPWM_OPR_A, MCPWM0A, MCPWM1A}, // 2rd motor will be MCPWM1 channel A
+  {_EMPTY_SLOT, &MCPWM0, MCPWM_UNIT_0, MCPWM_OPR_B, MCPWM0B, MCPWM1B}, // 3nd motor will be MCPWM0 channel B
   {_EMPTY_SLOT, &MCPWM1, MCPWM_UNIT_1, MCPWM_OPR_B, MCPWM0B, MCPWM1B}  // 4th motor will be MCPWM1 channel B
   };
 
@@ -195,7 +128,7 @@ void _configure2PWM(long pwm_frequency,const int pinA, const int pinB) {
   // disable all the slots with the same MCPWM
   // disable 3pwm bldc motor which would go in the same slot
   esp32_bldc_3pwm_motor_slots[slot_num].pinA = _TAKEN_SLOT;
-  if( slot_num < 2 ){
+  if( slot_num == 0 || slot_num == 2 ){ 
     // slot 0 of the 4pwm stepper
     esp32_stepper_4pwm_motor_slots[0].pin1A = _TAKEN_SLOT;
     // slot 0 of the 6pwm bldc
@@ -239,7 +172,7 @@ void _configure3PWM(long pwm_frequency,const int pinA, const int pinB, const int
   // disable all the slots with the same MCPWM
   // disable 2pwm steppr motor which would go in the same slot
   esp32_stepper_2pwm_motor_slots[slot_num].pin1pwm = _TAKEN_SLOT;
-  if( slot_num < 2 ){
+  if( slot_num == 0 || slot_num == 2 ){
     // slot 0 of the 4pwm stepper
     esp32_stepper_4pwm_motor_slots[0].pin1A = _TAKEN_SLOT;
     // slot 0 of the 6pwm bldc
@@ -280,20 +213,20 @@ void _configure4PWM(long pwm_frequency,const int pinA, const int pinB, const int
   }
   // disable all the slots with the same MCPWM
   if( slot_num == 0 ){
-    // slots 0 and 1 of the 3pwm bldc
+    // slots 0 and 2 of the 3pwm bldc
     esp32_bldc_3pwm_motor_slots[0].pinA = _TAKEN_SLOT;
-    esp32_bldc_3pwm_motor_slots[1].pinA = _TAKEN_SLOT;
-    // slots 0 and 1 of the 2pwm stepper taken
+    esp32_bldc_3pwm_motor_slots[2].pinA = _TAKEN_SLOT;
+    // slots 0 and 2 of the 2pwm stepper taken
     esp32_stepper_2pwm_motor_slots[0].pin1pwm = _TAKEN_SLOT;
-    esp32_stepper_2pwm_motor_slots[1].pin1pwm = _TAKEN_SLOT;
+    esp32_stepper_2pwm_motor_slots[2].pin1pwm = _TAKEN_SLOT;
     // slot 0 of the 6pwm bldc
     esp32_bldc_6pwm_motor_slots[0].pinAH = _TAKEN_SLOT;
   }else{
-    // slots 2 and 3 of the 3pwm bldc
-    esp32_bldc_3pwm_motor_slots[2].pinA = _TAKEN_SLOT;
+    // slots 1 and 3 of the 3pwm bldc
+    esp32_bldc_3pwm_motor_slots[1].pinA = _TAKEN_SLOT;
     esp32_bldc_3pwm_motor_slots[3].pinA = _TAKEN_SLOT;
-    // slots 2 and 3 of the 2pwm stepper taken
-    esp32_stepper_2pwm_motor_slots[2].pin1pwm = _TAKEN_SLOT;
+    // slots 1 and 3 of the 2pwm stepper taken
+    esp32_stepper_2pwm_motor_slots[1].pin1pwm = _TAKEN_SLOT;
     esp32_stepper_2pwm_motor_slots[3].pin1pwm = _TAKEN_SLOT;
     // slot 1 of the 6pwm bldc
     esp32_bldc_6pwm_motor_slots[1].pinAH = _TAKEN_SLOT;
@@ -386,15 +319,21 @@ int _configure6PWM(long pwm_frequency, float dead_zone, const int pinA_h, const 
 
   // disable all the slots with the same MCPWM
   if( slot_num == 0 ){
-    // slots 0 and 1 of the 3pwm bldc
+    // slots 0 and 2 of the 3pwm bldc
     esp32_bldc_3pwm_motor_slots[0].pinA = _TAKEN_SLOT;
-    esp32_bldc_3pwm_motor_slots[1].pinA = _TAKEN_SLOT;
+    esp32_bldc_3pwm_motor_slots[2].pinA = _TAKEN_SLOT;
+    // slots 0 and 2 of the 2pwm stepper taken
+    esp32_stepper_2pwm_motor_slots[0].pin1pwm = _TAKEN_SLOT;
+    esp32_stepper_2pwm_motor_slots[2].pin1pwm = _TAKEN_SLOT;
     // slot 0 of the 6pwm bldc
     esp32_stepper_4pwm_motor_slots[0].pin1A = _TAKEN_SLOT;
   }else{
-    // slots 2 and 3 of the 3pwm bldc
-    esp32_bldc_3pwm_motor_slots[2].pinA = _TAKEN_SLOT;
+    // slots 1 and 3 of the 3pwm bldc
+    esp32_bldc_3pwm_motor_slots[1].pinA = _TAKEN_SLOT;
     esp32_bldc_3pwm_motor_slots[3].pinA = _TAKEN_SLOT;
+    // slots 1 and 3 of the 2pwm stepper taken
+    esp32_stepper_2pwm_motor_slots[1].pin1pwm = _TAKEN_SLOT;
+    esp32_stepper_2pwm_motor_slots[3].pin1pwm = _TAKEN_SLOT;
     // slot 1 of the 6pwm bldc
     esp32_stepper_4pwm_motor_slots[1].pin1A = _TAKEN_SLOT;
   }

@@ -1,6 +1,7 @@
-#include "../hardware_api.h" 
 
-#if defined(_SAMD21_)||defined(_SAMD51_)||defined(_SAME51_)
+#include "../../current_sense/hardware_api.h"
+
+#if defined(_STM32_DEF_)
 
 #define _ADC_VOLTAGE 3.3f
 #define _ADC_RESOLUTION 1024.0f
@@ -33,5 +34,6 @@ void _configureADCLowSide(const int pinA,const int pinB,const int pinC){
   pinMode(pinB, INPUT);
   if( _isset(pinC) ) pinMode(pinC, INPUT);
 }
+
 
 #endif

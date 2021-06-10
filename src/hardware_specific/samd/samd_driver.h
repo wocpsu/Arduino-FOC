@@ -9,7 +9,7 @@
 #define SIMPLEFOC_SAMD_DEBUG_SERIAL Serial
 #endif
 
-#include "../hardware_api.h"
+#include "./../../drivers/hardware_api.h"
 
 
 #if defined(__SAME51J19A__) || defined(__ATSAME51J19A__)

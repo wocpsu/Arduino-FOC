@@ -1,5 +1,4 @@
-#include "../hardware_api.h"
-#include "../../drivers/hardware_api.h"
+#include "../../current_sense/hardware_api.h"
 
 #ifdef ESP_H
 

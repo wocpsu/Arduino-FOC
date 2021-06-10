@@ -1,5 +1,4 @@
-
-#include "../hardware_api.h"
+#include "./../../drivers/hardware_api.h"
 
 #if defined(_STM32_DEF_)
 // default pwm parameters

@@ -1,6 +1,6 @@
-#include "../hardware_api.h"
+#include "../drivers/hardware_api.h"
 
-// if the mcu doen't have defiend analogWrite
+// if the mcu doesn't have defiend analogWrite
 #if defined(ESP_H)
   __attribute__((weak)) void analogWrite(uint8_t pin, int value){ };
 #endif

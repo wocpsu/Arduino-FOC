@@ -2,6 +2,8 @@
 /**
  * Support for the RP2040 MCU, as found on the Raspberry Pi Pico.
  */
+#include "./../../drivers/hardware_api.h"
+
 #if defined(TARGET_RP2040)
 
 #define SIMPLEFOC_DEBUG_RP2040

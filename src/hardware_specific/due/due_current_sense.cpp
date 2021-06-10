@@ -1,6 +1,6 @@
-#include "../hardware_api.h" 
+#include "../../current_sense/hardware_api.h"
 
-#if defined(__arm__) && defined(CORE_TEENSY)
+#if defined(__arm__) && defined(__SAM3X8E__) 
 
 #define _ADC_VOLTAGE 3.3f
 #define _ADC_RESOLUTION 1024.0f
@@ -33,5 +33,6 @@ void _configureADCLowSide(const int pinA,const int pinB,const int pinC){
   pinMode(pinB, INPUT);
   if( _isset(pinC) ) pinMode(pinC, INPUT);
 }
+
 
 #endif

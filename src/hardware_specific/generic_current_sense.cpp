@@ -1,4 +1,4 @@
-#include "../hardware_api.h"
+#include "../current_sense/hardware_api.h"
 
 // function reading an ADC value and returning the read voltage
 __attribute__((weak))  float _readADCVoltageInline(const int pinA){

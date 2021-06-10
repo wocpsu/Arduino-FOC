@@ -1,6 +1,6 @@
 
 
-#include "./samd_mcu.h"
+#include "./samd_driver.h"
 
 
 #if defined(_SAMD51_)||defined(_SAME51_)
