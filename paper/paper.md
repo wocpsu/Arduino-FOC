@@ -52,7 +52,7 @@ Each block in \autoref{fig:scheme} (b) represents the operational necessities of
 
 ![(a) FOC approach (b) SimpleFOC architecture overview \label{fig:scheme}](scheme.png)
 
-# The Documentation and a Sample Workflow of SimpleFOC
+# The Documentation and a Sample Workflow
 Similar to existing documentation frameworks (e.g., Diátaxis, @procida2021), SimpleFOC library is explained with tutorials, how-to guides, and additional references from the literature by using Jekyll-based Just-to-Docs. With that, the intention is to demystify FOC for solving motion control challenges in research and teaching. Several examples in the documentation ease using the SimpleFOC, which runs on microcontroller boards to control the motion of different numbers of actuators to research and teaching of highly dynamic cyber-physical systems. A user can easily set up SimpleFOC library to control the target hardware’s motion by following the workflow in \autoref{fig:setup}.
 
 ![Simplistic workflow to control BLDC motors with simpleFOC \label{fig:setup}](setup.png)
