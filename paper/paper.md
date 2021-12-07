@@ -16,7 +16,7 @@ authors:
     affiliation: 5
   - name: Owen Williams
     affiliation: 6
-  - name: David Gonzalez
+  - name: David González-Reyes
     affiliation: 7
 affiliations:
  - name: Institut national de recherche en informatique et en automatique (INRIA), AUCTUS team
