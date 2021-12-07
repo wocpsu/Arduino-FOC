@@ -6,7 +6,7 @@ tags:
   - Applied Control Theory
   - cpp
 authors:
-  - name: Antun Skuric^[co-first author] # note this makes a footnote saying 'co-first author'
+  - name: Antun Skuric^[corresponding author] # note this makes a footnote saying 'co-first author'
     orcid: 0000-0002-3323-4482
     affiliation: "1,2" # (Multiple affiliations must be quoted)
   - name: Hasan Sinan Bank^[co-first author] # note this makes a footnote saying 'co-first author'
