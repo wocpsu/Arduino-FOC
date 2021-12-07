@@ -17,6 +17,7 @@ authors:
   - name: Owen Williams
     affiliation: 6
   - name: David González-Reyes
+    orcid: 0000-0002-1535-3007
     affiliation: 7
 affiliations:
  - name: Institut national de recherche en informatique et en automatique (INRIA), AUCTUS team
@@ -31,7 +32,7 @@ affiliations:
    index: 5
  - name: Institution Name
    index: 6
- - name: Institution Name
+ - name: Community Member
    index: 7
 date: 07 December 2021
 bibliography: paper.bib
