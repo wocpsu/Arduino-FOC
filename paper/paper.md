@@ -9,7 +9,7 @@ authors:
   - name: Antun Skuric^[co-first author] # note this makes a footnote saying 'co-first author'
     orcid: 0000-0002-3323-4482
     affiliation: "1,2" # (Multiple affiliations must be quoted)
-  - name: Hasan Sinan Bank^[co-first author] # note this makes a footnote saying 'co-first author'
+  - name: Hasan Sinan Bank^[co-first author]^[corresponding author] # note this makes a footnote saying 'co-first author'
     orcid: 0000-0002-0626-2664
     affiliation: "3,4"
   - name: Richard Unger
