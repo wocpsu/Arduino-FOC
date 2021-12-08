@@ -1,4 +1,4 @@
---
+---
 title: 'SimpleFOC: A Field Oriented Control (FOC) Library for Controlling Brushless Direct Current (BLDC) and Stepper Motors'
 tags: 
   - Motor Control
