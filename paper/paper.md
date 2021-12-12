@@ -8,39 +8,33 @@ tags:
 authors:
   - name: Antun Skuric^[corresponding author] # note this makes a footnote saying 'co-first author'
     orcid: 0000-0002-3323-4482
-    affiliation: "1,2" # (Multiple affiliations must be quoted)
+    affiliation: 1 # (Multiple affiliations must be quoted)
   - name: Hasan Sinan Bank^[co-first author] # note this makes a footnote saying 'co-first author'
     orcid: 0000-0002-0626-2664
-    affiliation: "3,4"
+    affiliation: "2,3"
   - name: Richard Unger
-    affiliation: 5
+    affiliation: 4
   - name: Owen Williams
-    affiliation: 6
+    affiliation: 4
   - name: David González-Reyes
     orcid: 0000-0002-1535-3007
-    affiliation: 7
+    affiliation: 4
 affiliations:
- - name: Institut national de recherche en informatique et en automatique (INRIA), AUCTUS team
+ - name: INRIA Bordeaux, AUCTUS team, Université de Bordeaux
    index: 1
- - name: Université de Bordeaux
-   index: 2
  - name: California State University, Chico
-   index: 3
+   index: 2
  - name:  Craftnetics Inc.
+   index: 3
+ - name: Community Member
    index: 4
- - name: Community Member
-   index: 5
- - name: Institution Name
-   index: 6
- - name: Community Member
-   index: 7
-date: 07 December 2021
+date: 12 December 2021
 bibliography: paper.bib
 ---
 
 # Summary
 
-Field Oriented Control (FOC) is a well-known strategy for controlling different types of electrically commutated motors (e.g., Alternative Current based, Brushless DC, etc.) via phase-commutation. As opposed to the widely used brushed DC motors, which are by design mechanically commutated, brushless motors (e.g., BLDC, stepper, AC, etc.) rely on the control algorithms and electronics to create the appropriate magnetic field in the motor to ensure their desired motion. Many techniques [@jalili2009investigation; @bida2018pmsm] have been developed over the years, of which FOC is arguably one of the most efficient ones. However, the FOC approach has several disadvantages, including complex control architecture, limited computational performance, and highly specific [@belhamel2020model; @cheles2008sensorless], to specific microcontrollers, motor drivers, current and position sensors, and motors [@castiglia2018high; @carey2019hybrid; @reddy2016soc].
+Field Oriented Control (FOC) is a well-known strategy for controlling different types of electrically commutated motors (e.g., Alternative Current based, Brushless DC, etc.) via phase-commutation. As opposed to the widely used brushed DC motors, which are by design mechanically commutated, brushless motors (e.g., BLDC, stepper, AC, etc.) rely on the control algorithms and electronics to create the appropriate magnetic fields and ensure motors' desired motion. Many techniques [@jalili2009investigation; @bida2018pmsm] have been developed over the years, of which FOC is arguably one of the most efficient ones. However, the FOC approach has relatively complex control architecture requiring substantial computational performance. Since the motion control applications are implemented on embedded systems with limited performance, various optimisations and simplifications are usually necessary. This makes the FOC approach almost exclusively highly specific to specific microcontroller architectures [@belhamel2020model; @cheles2008sensorless], motor drivers, current and position sensors, and motors [@castiglia2018high; @carey2019hybrid; @reddy2016soc].
 
 SimpleFOC has been developed in an effort to provide a more generic and easy-to-use implementation of the FOC method to bolster the rapid development of highly dynamic cyber-physical systems (e.g., control theory experimental setup, dynamic robotic systems, etc.). 
 
