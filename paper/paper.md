@@ -1,5 +1,5 @@
 ---
-title: 'SimpleFOC: A Cross-platform Field Oriented Control (FOC) Library for Controlling Brushless Direct Current (BLDC) and Stepper Motors'
+title: 'SimpleFOC: A Field Oriented Control (FOC) Library for Controlling Brushless Direct Current (BLDC) and Stepper Motors'
 tags: 
   - Motor Control
   - Dynamical Robot Control
