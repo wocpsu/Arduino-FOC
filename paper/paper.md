@@ -15,10 +15,10 @@ authors:
   - name: Richard Unger
     affiliation: 4
   - name: Owen Williams
-    affiliation: 5
+    affiliation: 4
   - name: David González-Reyes
     orcid: 0000-0002-1535-3007
-    affiliation: 6
+    affiliation: 4
 affiliations:
  - name: INRIA Bordeaux, AUCTUS team, Université de Bordeaux, France
    index: 1
@@ -26,12 +26,8 @@ affiliations:
    index: 2
  - name:  Craftnetics Inc., United States of America
    index: 3
- - name: Community Member, Austria
+ - name: Community Member
    index: 4
- - name: Community Member, Whales
-   index: 5
- - name: Community Member, Mexico
-   index: 6
 date: 12 December 2021
 bibliography: paper.bib
 ---
