@@ -20,11 +20,11 @@ authors:
     orcid: 0000-0002-1535-3007
     affiliation: 4
 affiliations:
- - name: INRIA Bordeaux, AUCTUS team, Université de Bordeaux
+ - name: INRIA Bordeaux, AUCTUS team, Université de Bordeaux, France
    index: 1
- - name: California State University, Chico
+ - name: California State University, Chico, United States of America
    index: 2
- - name:  Craftnetics Inc.
+ - name:  Craftnetics Inc., United States of America
    index: 3
  - name: Community Member
    index: 4
