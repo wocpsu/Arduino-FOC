@@ -146,9 +146,9 @@ class FOCMotor
     float target; //!< current target value - depends of the controller
   	float shaft_angle;//!< current motor angle
   	float electrical_angle;//!< current electrical angle
-  	float shaft_velocity;//!< current motor velocity 
+  	float shaft_velocity =0;//!< current motor velocity 
     float current_sp;//!< target current ( q current )
-    float shaft_velocity_sp;//!< current target velocity
+    float shaft_velocity_sp=0;//!< current target velocity
     float shaft_angle_sp;//!< current target angle
     DQVoltage_s voltage;//!< current d and q voltage set to the motor
     DQCurrent_s current;//!< current d and q current measured

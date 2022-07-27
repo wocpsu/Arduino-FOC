@@ -176,21 +176,25 @@ int BLDCMotor::alignSensor() {
       float angle = _3PI_2 + _2PI * i / 500.0f;
       setPhaseVoltage(voltage_sensor_align, 0,  angle);
 	  sensor->update();
-      _delay(2);
+      _delay(10);
     }
+      _delay(500);
     // take and angle in the middle
     sensor->update();
     float mid_angle = sensor->getAngle();
+    SIMPLEFOC_DEBUG("MOT: Mid Angle: ",mid_angle );
     // move one electrical revolution backwards
     for (int i = 500; i >=0; i-- ) {
       float angle = _3PI_2 + _2PI * i / 500.0f ;
       setPhaseVoltage(voltage_sensor_align, 0,  angle);
 	  sensor->update();
-      _delay(2);
+      _delay(10);
     }
+      _delay(500);
     sensor->update();
     float end_angle = sensor->getAngle();
-    setPhaseVoltage(0, 0, 0);
+    //setPhaseVoltage(0, 0, 0);
+    SIMPLEFOC_DEBUG("MOT: End Angle: ",end_angle);
     _delay(200);
     // determine the direction the sensor moved
     if (mid_angle == end_angle) {
@@ -214,6 +218,7 @@ int BLDCMotor::alignSensor() {
 
   // zero electric angle not known
   if(!_isset(zero_electric_angle)){
+	SIMPLEFOC_DEBUG("MOT: Cal Elec Angle");
     // align the electrical phases of the motor and sensor
     // set angle -90(270 = 3PI/2) degrees
     setPhaseVoltage(voltage_sensor_align, 0,  _3PI_2);
@@ -228,6 +233,8 @@ int BLDCMotor::alignSensor() {
     if(monitor_port){
       SIMPLEFOC_DEBUG("MOT: Zero elec. angle: ", zero_electric_angle);
     }
+	
+    SIMPLEFOC_DEBUG("MOT: Angle after cal: ", sensor->getAngle());
     // stop everything
     setPhaseVoltage(0, 0, 0);
     _delay(200);
