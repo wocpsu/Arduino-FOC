@@ -11,7 +11,11 @@
  * See more info in docs.simplefoc.com/commander_interface
  */
 #include <SimpleFOC.h>
-static int taskCore = 0;
+unsigned long microsPerScan;
+unsigned long microsLastScanStart;
+int scanSamples=5000;
+int currentScanSample;
+
 #include "soc/timer_group_struct.h"
 #include "soc/timer_group_reg.h"
 // magnetic sensor instance - Sine/Cos
@@ -29,65 +33,19 @@ BLDCMotor motor = BLDCMotor( 5, 0.0027, 38.462 );
 //  - phB_h, phC_l - C phase pwm pin high/low pair
 //  - enable pin    - (optional output)
 BLDCDriver6PWM driver = BLDCDriver6PWM(21, 22, 23, 25 , 26, 27);
-//BLDCDriver6PWM driver = BLDCDriver6PWM(21, 22, 23, 25 , 28, 29, 18);
-//driver.dead_zone = 0.02; //Amount of dead-time for each pwm cycle, as a proportion of 100% duty cycle. A float in the range [0,1]. Values under 10% make sense.
-// Hall sensor instance
-// HallSensor(int hallA, int hallB , int hallC , int pp)
-//  - hallA, hallB, hallC    - HallSensor A, B and C pins
-//  - pp                     - pole pairs
-//HallSensor sensor = HallSensor(2, 3, 4, 5);
+
 // velocity set point variable
 float target_velocity = 0;
 // commander interface
 Commander command = Commander(Serial);
 void onMotor(char* cmd){ command.motor(&motor, cmd); }
-//void doTarget(char* cmd){ command.scalar(&target_velocity, cmd); }
-void coreTask( void * pvParameters ){
- //    TickType_t xLastWakeTime;
-//    const TickType_t xTaskFrequency = 1; // (ms)
-//    xLastWakeTime = xTaskGetTickCount(); // Initialise the xLastVoltageWakeTime variable with the current time.
-    //String taskMessage = "Task running on core ";
-    //taskMessage = taskMessage + xPortGetCoreID();
- 
-    while(true){
-      unsigned int TempSin, TempCos;
-      TempCos = adcRead(sensor.pinCos);
-      TempSin = adcRead(sensor.pinSin);
-      for(int i=1;i<100;i++)
-      {
-      TempCos = TempCos + adcRead(sensor.pinCos);
-      TempSin = TempSin + adcRead(sensor.pinSin);
-      }
-      
-      sensor.taskADCReadSin = TempSin/100;
-      sensor.taskADCReadCos = TempCos/100;
-      delayMicroseconds(10);
-      TIMERG0.wdt_wprotect=TIMG_WDT_WKEY_VALUE;
-      TIMERG0.wdt_feed=1;
-      TIMERG0.wdt_wprotect=0;
-      //esp_task_wdt_reset();
-//      sensor.update();
-//      Serial.print("Angle= ");
-//      Serial.println(sensor.getAngle());
-//      Serial.println("Cosine= ");
-//      Serial.println(sensor.taskADCReadCos);
-//      vTaskDelayUntil(&xLastWakeTime, xTaskFrequency + 1);
-    }
- 
-}
+
 void setup() {
   
   Serial.begin(115200);
-    xTaskCreatePinnedToCore(
-                    coreTask,   /* Function to implement the task */
-                    "coreTask", /* Name of the task */
-                    10000,      /* Stack size in words */
-                    NULL,       /* Task input parameter */
-                    5,          /* Priority of the task */
-                    NULL,       /* Task handle. */
-                    taskCore);  /* Core where the task should run */
- 
-  Serial.println("Task created...");
+  //sensor.StartTasking();
+
+  Serial.println("Getting Sensor Ready...");
   delay(500);
   for(int a =1; a>1000;a++)
   {
@@ -106,15 +64,14 @@ void setup() {
   // link the motor to the sensor
   motor.linkSensor(&sensor);//Curry
 
-//motor.sensor_offset = -1.9; // default 0 rad
-/// motor.sensor_direction = Direction::CW; // CW or CCW
-// motor.sensor_offset = 5.424; // default 0 rad
+//motor.sensor_direction = Direction::CCW; // CW or CCW
+//motor.zero_electric_angle = 0.35; // default 0 rad
   // driver config
   // power supply voltage [V]
   driver.voltage_power_supply = 24;
   ///10kHz currently with simpleFocStudio this is the limit
   driver.pwm_frequency = 10000;
-  driver.dead_zone = 0.005;
+  driver.dead_zone = 0.002;//10KHZ 500us
   driver.init();
   // link driver
   motor.linkDriver(&driver);
@@ -161,16 +118,31 @@ void setup() {
 
   // define the motor id
   command.add('A', onMotor, "motor");
-
- // command.add('T', doTarget, "target velocity");
-  // Run user commands to configure and the motor (find the full command list in docs.simplefoc.com)
-  //Serial.println(F("Motor commands sketch | Initial motion control > torque/voltage : target 2V."));
-
+  motor.disable();
   _delay(1000);
 }
 
 
 void loop() {
+
+  //loop time debug
+//if(currentScanSample == 0) microsLastScanStart = _micros();
+//if(currentScanSample>=scanSamples){
+//  microsPerScan = (_micros()-microsLastScanStart)/scanSamples;
+//  Serial.print("Loop Microsec per scan = ");
+//  Serial.println(microsPerScan);    
+//  Serial.print("Task time per scan = ");
+//  Serial.println(sensor.taskTime); 
+//  Serial.print("Angle= ");
+//  Serial.println(sensor.getSensorAngle());
+//  currentScanSample = 0;
+//}
+//else {
+//  currentScanSample++;
+//}
+
+  //Serial.print("Angle= ");
+
   // iterative setting FOC phase voltage
   //sensor.update();
   motor.loopFOC();//Curry

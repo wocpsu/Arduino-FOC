@@ -91,4 +91,37 @@ float _electricalAngle(float shaft_angle, int pole_pairs);
  */
 float _sqrtApprox(float value);
 
+///Atan2 works on ESP32
+class cordic10
+{
+public:
+	void atan2sqrt(int _x, int _y);
+	uint16_t angle;
+	uint16_t radius;
+
+private:
+	int x0, y0, tmp;
+	int x1, y1;
+	unsigned char k;
+	uint16_t phi, currentAngle;
+	bool sign;
+};
+
+
+class cordic8
+{
+public:
+	void atan2sqrt(int _x, int _y);
+	unsigned char angle;
+	unsigned int radius;
+
+private:
+	int x0, y0, tmp;
+	long x1, y1;
+	unsigned char phi, currentAngle, k;
+	bool sign;
+};
+
+
+
 #endif

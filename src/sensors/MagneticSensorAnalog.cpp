@@ -23,27 +23,7 @@ MagneticSensorAnalog::MagneticSensorAnalog(uint8_t _pinSin,uint8_t _pinCos, int 
     pinMode(pinCos, INPUT);
 	#ifndef __AVR__
 	analogReadResolution(10);//Set Read Resolution to 10 bits//curry
-	///Timer
-    // adcTimer = timerBegin(1, 80, true);
-    // timerAttachInterrupt(adcTimer, &onTimer, true);
-    // timerAlarmWrite(adcTimer, 20, true); 
-    // timerAlarmEnable(adcTimer);
-    // xTaskCreatePinnedToCore(
-						// coreTask,   /* Function to implement the task */
-						// "coreTask", /* Name of the task */
-						// 10000,      /* Stack size in words */
-						// NULL,       /* Task input parameter */
-						// 0,          /* Priority of the task */
-						// NULL,       /* Task handle. */
-						// &MagneticSensorAnalog::taskCore);  /* Core where the task should run */
-	  // xTaskCreate(
-                    // taskOne,          /* Task function. */
-                    // "TaskOne",        /* String with name of task. */
-                    // 10000,            /* Stack size in bytes. */
-                    // NULL,             /* Parameter passed as input of the task */
-                    // 1,                /* Priority of the task. */
-                    // NULL);            /* Task handle. */
-	  //Serial.println("Task created...");
+	StartTasking();///Start ADC Recording Task
 
 	#endif
   //}
@@ -72,9 +52,10 @@ float MagneticSensorAnalog::getSensorAngle(){
   //float rad = 0.0061419257*(float)A; //1024 to rad
   
 #ifndef __AVR__
-  cordic.atan2sqrt(sinInt - zeroSineCos*4, cosInt - zeroSineCos*4);
-  //return ( (float) (raw_count) / (float)cpr) * _2PI;
-  float rad = (float)cordic.angle*_2PI/65536;
+  //cordic.atan2sqrt(sinInt - zeroSineCos*4, cosInt - zeroSineCos*4); ///using cordic 10 us faster than atan
+  //float rad = (float)cordic.angle*_2PI/65536; ///using cordic 10 us faster than atan
+  //float rad = _normalizeAngle(atan2(sinInt - zeroSineCos*4, cosInt - zeroSineCos*4));///using atan kinda slow
+  float rad = radTask;
   return rad;
 #else
 	

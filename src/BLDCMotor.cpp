@@ -501,6 +501,10 @@ void BLDCMotor::setPhaseVoltage(float Uq, float Ud, float angle_el) {
 
       // angle normalization in between 0 and 2pi
       // only necessary if using _sin and _cos - approximation functions
+	  // if(abs(shaft_velocity)>=6)
+	  // {
+		  // angle_el = angle_el + 0.1; //move electrical angle forward one period for more torque to start
+	  // }
       angle_el = _normalizeAngle(angle_el);
       _ca = _cos(angle_el);
       _sa = _sin(angle_el);
